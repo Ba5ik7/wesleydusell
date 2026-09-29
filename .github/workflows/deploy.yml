@@ -48,7 +48,7 @@ jobs:
         run: |
           npm ci
           npm run build -- --configuration development
-          test -f dist/wesleydusell/index.html
+          test -f dist/wesleydusell/browser/index.html
 
       - name: Copy static assets to frontend
         uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345 # v1.0.0
@@ -58,7 +58,7 @@ jobs:
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           fingerprint: ${{ secrets.SSH_HOST_FINGERPRINT }}
-          source: 'dist/wesleydusell/*'
+          source: 'dist/wesleydusell/browser/*'
           target: '/opt/wesleydusell.com/'
-          strip_components: 2
+          strip_components: 3
           overwrite: true
