@@ -1,59 +1,34 @@
-# Wesleydusell
+# Wesley DuSell — 21 Years of Making the Web
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.0.
+An Angular 21 cinematic tribute to web development, beginning with the overlapping movements of 2005–2010.
 
-## Development server
+## Run locally
 
-To start a local development server, run:
-
-```bash
-ng serve
+```sh
+npm ci
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open http://localhost:4200. Scroll to travel through six chapters, use the timeline or chapter index to jump, or use the main button to advance. Motion can be paused and respects the operating system's reduced-motion preference. Chapter navigation and dialogs support the keyboard.
 
-## Code scaffolding
+## Story and visuals
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- `src/app/journey/chapters.ts`: chapter copy, dates, labels, and illustrative historical code.
+- `src/app/journey/artifact.ts`: lightweight CSS 3D artifacts, without a WebGL dependency.
+- `src/app/journey/journey.ts`: signal-based scene selection and navigation.
+- `src/styles.scss`: scene styling, responsive layouts, and motion.
 
-```bash
-ng generate component component-name
+The dates describe overlapping movements rather than exact invention dates. The project information dialog includes historical context and references. The first era is complete; later eras are intentionally not invented. Fonts are loaded from Google Fonts with local fallbacks.
+
+## Validation
+
+```sh
+npm test -- --watch=false
+npm run build
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Deployment
 
-```bash
-ng generate --help
-```
+The existing GitHub Actions workflow deploys pushes to `main` to the configured frontend host. It now runs tests and builds the production configuration. It requires `DROPLET_IP`, `SSH_HOST_FINGERPRINT`, and `SSH_PRIVATE_KEY` repository secrets. Output is built into `dist/wesleydusell/browser` and copied to `/opt/wesleydusell.com/`.
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Domain/DNS, TLS, and host configuration are managed outside this repository. Local work does not publish the site until pushed through the deployment workflow.

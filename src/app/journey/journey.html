@@ -1,0 +1,165 @@
+<a class="skip-link" href="#story">Skip to the story</a>
+<header class="site-header">
+  <a
+    class="wordmark"
+    href="#"
+    (click)="$event.preventDefault(); goTo(0)"
+    aria-label="Wesley DuSell, back to beginning"
+    >wd<span>·</span></a
+  >
+  <div class="header-title">WESLEY DUSELL <span>A DEVELOPER’S JOURNEY</span></div>
+  <nav aria-label="Main navigation">
+    <button class="about-button" (click)="openDialog('about')">
+      About the project <span>↗</span></button
+    ><button class="index-button" (click)="openDialog('chapters')">
+      Chapter index <span>☷</span>
+    </button>
+  </nav>
+</header>
+<main id="story">
+  <div class="journey-rail" #rail>
+    <section class="theater" aria-label="An interactive history of the web">
+      <div class="era-heading">
+        <span><i></i> 21 YEARS OF MAKING THE WEB</span><span>ERA 01 <b>/</b> 2005 — 2010</span>
+      </div>
+      <div class="scene-layout">
+        <div class="story-copy" aria-live="polite" aria-atomic="true">
+          @for (item of [chapter()]; track item.eyebrow) {
+            <div class="chapter-copy" [class]="'chapter-copy transition-' + active()">
+              <p class="eyebrow"><span class="little-line"></span>{{ item.eyebrow }}</p>
+              <h1>
+                @for (line of item.lines; track line) {
+                  <span>{{ line }}</span>
+                }
+                <em>{{ item.accent }}</em>
+              </h1>
+              <p class="description">{{ item.description }}</p>
+              <div class="tags">
+                @for (tag of item.tags; track tag) {
+                  <span>{{ tag }}</span>
+                }
+              </div>
+              <button class="continue-button" (click)="goTo(active() === 5 ? 0 : active() + 1)">
+                {{
+                  active() === 0
+                    ? 'Enter the story'
+                    : active() === 5
+                      ? 'Experience it again'
+                      : 'Keep exploring'
+                }}<span>↗</span>
+              </button>
+            </div>
+          }
+        </div>
+        <div class="visual-stage" (pointermove)="move($event)" (pointerleave)="resetTilt($event)">
+          <div class="year-watermark">{{ chapter().year.split('–')[0] }}</div>
+          <app-artifact [scene]="active()" />
+          <div class="artifact-caption">
+            <span class="artifact-dot"></span>{{ chapter().artifact
+            }}<span class="caption-rule"></span><span>0{{ active() + 1 }}</span>
+          </div>
+          <details class="code-inspector">
+            <summary><span>⌘</span> A little of the original magic <span>+</span></summary>
+            <pre><code>{{chapter().code}}</code></pre>
+          </details>
+        </div>
+      </div>
+      <div class="scene-bottom">
+        <p><span>“</span>{{ chapter().note }}</p>
+        <span class="scroll-hint"><span>↓</span> SCROLL TO TRAVEL THROUGH TIME</span>
+      </div>
+      <nav class="timeline" aria-label="Story chapters">
+        <div class="timeline-line"><span [style.width.%]="progress() * 100"></span></div>
+        @for (item of chapters; track item.label; let index = $index) {
+          <button
+            [class.active]="active() === index"
+            [class.visited]="active() > index"
+            [attr.aria-current]="active() === index ? 'step' : null"
+            (click)="goTo(index)"
+          >
+            <span class="timeline-dot"></span><span class="timeline-year">{{ item.year }}</span
+            ><span class="timeline-label">{{ item.label }}</span>
+          </button>
+        }
+      </nav>
+      <footer class="theater-footer">
+        <span>A PERSONAL HISTORY. A SHARED EVOLUTION.</span
+        ><button (click)="motion.set(!motion())" [attr.aria-pressed]="motion()">
+          <span class="motion-icon">{{ motion() ? 'Ⅱ' : '▷' }}</span> MOTION
+          {{ motion() ? 'ON' : 'OFF' }}</button
+        ><span>BUILT WITH CURIOSITY <span class="orange">✳</span></span>
+      </footer>
+    </section>
+  </div>
+  <section class="epilogue">
+    <p class="eyebrow">END OF ERA 01 / THE STORY CONTINUES</p>
+    <h2>The tools change.<br /><em>The spark doesn’t.</em></h2>
+    <p>
+      From a Flash stage to an open canvas. This is the beginning of a 21-year love letter to making
+      things for the web.
+    </p>
+    <button class="continue-button" (click)="goTo(0)">Back to the beginning <span>↑</span></button
+    ><button class="source-button" (click)="openDialog('about')">
+      Behind the story & sources ↗
+    </button>
+  </section>
+</main>
+<dialog
+  aria-label="Project information and chapter navigation"
+  #modal
+  (click)="closeDialog($event)"
+>
+  <div class="dialog-top">
+    <span class="eyebrow">{{
+      dialogMode() === 'chapters' ? 'EXPLORE THE FIRST ERA' : 'A LOVE LETTER TO THE WEB'
+    }}</span
+    ><button class="close-button" (click)="modal.close()" aria-label="Close dialog">×</button>
+  </div>
+  @if (dialogMode() === 'chapters') {
+    <h2>Six moments.<br /><em>One beginning.</em></h2>
+    <div class="chapter-list">
+      @for (item of chapters; track item.label; let index = $index) {
+        <button (click)="goTo(index)">
+          <span>0{{ index + 1 }}</span
+          ><b>{{ item.label }}</b
+          ><small>{{ item.year }}</small
+          ><span>↗</span>
+        </button>
+      }
+    </div>
+  } @else {
+    <h2>Built on<br /><em>curiosity.</em></h2>
+    <p>
+      This is Wesley DuSell’s tribute to 21 years of web development. The first era follows the
+      creative promise of Flash and the shift toward an open, mobile web.
+    </p>
+    <p>
+      The dates describe overlapping movements, not a strict succession of inventions. WordPress
+      began in 2003; AJAX named existing techniques in 2005; jQuery launched in 2006. Flex Builder
+      became Flash Builder in 2010. ColdFusion and SOAP continued beyond this era.
+    </p>
+    <div class="source-links">
+      <a
+        href="https://help.adobe.com/en_US/as3/dev/as3_devguide.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Adobe / ActionScript 3 developer’s guide ↗</a
+      ><a
+        href="https://blog.jquery.com/2016/01/14/ten-years-of-jquery-and-beyond/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >jQuery / The beginning, January 2006 ↗</a
+      ><a
+        href="https://wordpress.org/news/2003/05/wordpress-now-available/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >WordPress / The first release, 2003 ↗</a
+      ><a
+        href="https://www.apple.com/newsroom/2007/01/09Apple-Reinvents-the-Phone-with-iPhone/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Apple / Introducing iPhone, 2007 ↗</a
+      >
+    </div>
+  }
+</dialog>

@@ -57,7 +57,8 @@ jobs:
       - name: Install dependencies and build
         run: |
           npm ci
-          npm run build -- --configuration development
+          npm run test -- --watch=false
+          npm run build -- --configuration production
           test -f dist/wesleydusell/browser/index.html
 
       - name: Copy static assets to frontend
