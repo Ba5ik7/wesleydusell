@@ -10,11 +10,12 @@ import {
   viewChild,
 } from '@angular/core';
 import { Artifact } from './artifact';
+import { Backdrop } from './backdrop';
 import { CHAPTERS } from './chapters';
 
 @Component({
   selector: 'app-journey',
-  imports: [Artifact],
+  imports: [Artifact, Backdrop],
   templateUrl: './journey.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -29,7 +30,7 @@ export class Journey {
   readonly chapter = computed(() => this.chapters[this.active()]);
   readonly progress = signal(0);
   readonly motion = signal(true);
-  readonly dialogMode = signal<'chapters' | 'about'>('chapters');
+  readonly dialogMode = signal<'chapters' | 'about' | 'event'>('chapters');
   readonly modal = viewChild<ElementRef<HTMLDialogElement>>('modal');
   readonly rail = viewChild<ElementRef<HTMLElement>>('rail');
   private readonly destroyRef = inject(DestroyRef);
@@ -52,6 +53,7 @@ export class Journey {
   onScroll() {
     cancelAnimationFrame(this.frame);
     this.frame = requestAnimationFrame(() => {
+      if (this.modal()?.nativeElement.open) return;
       const rail = this.rail()?.nativeElement;
       if (!rail) return;
       const distance = rail.offsetHeight - window.innerHeight;
@@ -79,7 +81,7 @@ export class Journey {
     this.modal()?.nativeElement.close();
   }
 
-  openDialog(mode: 'chapters' | 'about') {
+  openDialog(mode: 'chapters' | 'about' | 'event') {
     this.dialogMode.set(mode);
     this.modal()?.nativeElement.showModal();
   }

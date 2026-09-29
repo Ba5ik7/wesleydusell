@@ -20,12 +20,45 @@ describe('Journey', () => {
         fixture.componentInstance.chapters[index].accent,
       );
       expect(buttons[index].getAttribute('aria-current')).toBe('step');
+      expect(
+        root
+          .querySelector('.backdrop-layer.is-current')
+          ?.classList.contains(
+            'backdrop-' +
+              ['spark', 'dimension', 'broadcast', 'network', 'browser', 'horizon'][index],
+          ),
+      ).toBe(true);
     }
     root.querySelector<HTMLButtonElement>('.continue-button')?.click();
     fixture.detectChanges();
     expect(fixture.componentInstance.active()).toBe(0);
     expect(scroll).toHaveBeenCalled();
     scroll.mockRestore();
+  });
+
+  it('opens sourced historical context for the selected event', async () => {
+    const fixture = TestBed.createComponent(Journey);
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    const dialog = root.querySelector('dialog') as HTMLDialogElement;
+    const showModal = vi.fn(() => dialog.setAttribute('open', ''));
+    Object.defineProperty(dialog, 'showModal', { value: showModal });
+    fixture.componentInstance.active.set(5);
+    fixture.detectChanges();
+    root.querySelector<HTMLButtonElement>('.event-button')?.click();
+    fixture.detectChanges();
+    expect(showModal).toHaveBeenCalled();
+    expect(dialog.textContent).toContain('June 29, 2007');
+    expect(dialog.textContent).toContain('April 29, 2010');
+    expect(dialog.querySelectorAll('.event-sources a').length).toBe(4);
+    expect(dialog.querySelector('a[href*="businessinsider.com"]')).not.toBeNull();
+    for (const chapter of fixture.componentInstance.chapters) {
+      for (const section of chapter.insight.sections) {
+        for (const reference of section.references) {
+          expect(chapter.insight.sources[reference - 1]?.url).toMatch(/^https:\/\//);
+        }
+      }
+    }
   });
 
   it('allows the reader to pause decorative motion', async () => {

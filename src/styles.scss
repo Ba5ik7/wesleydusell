@@ -1559,3 +1559,335 @@ dialog > p {
     transform: translateY(9px);
   }
 }
+
+/* Full-stage environments persist while their light and geometry transition. */
+.theater {
+  isolation: isolate;
+  background: #101110;
+}
+.chapter-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.backdrop-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.35s ease;
+  overflow: hidden;
+}
+.backdrop-layer.is-current {
+  opacity: 1;
+}
+.backdrop-light,
+.backdrop-geometry,
+.backdrop-detail {
+  position: absolute;
+  inset: 0;
+  transition: transform 2s cubic-bezier(0.2, 0.65, 0.2, 1);
+}
+.backdrop-light {
+  transform: scale(1.16);
+}
+.is-current .backdrop-light {
+  transform: scale(1);
+}
+.backdrop-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, #101110eb 0%, #101110aa 30%, transparent 75%),
+    linear-gradient(0deg, #101110 0%, transparent 27%, transparent 80%, #10111099);
+}
+.backdrop-spark {
+  background: #21150f;
+}
+.backdrop-spark .backdrop-light {
+  background: radial-gradient(ellipse at 78% 47%, #b7592766, transparent 58%);
+}
+.backdrop-spark .backdrop-geometry {
+  inset: -30%;
+  background: repeating-conic-gradient(
+    from 25deg at 68% 45%,
+    transparent 0 19deg,
+    #df9a4d12 20deg,
+    transparent 21deg 40deg
+  );
+  transform: rotate(-12deg) scale(1.1);
+}
+.backdrop-spark.is-current .backdrop-geometry {
+  transform: rotate(0deg) scale(1);
+}
+.backdrop-spark .backdrop-detail {
+  background-image: radial-gradient(#f5b97366 1px, transparent 1px);
+  background-size: 89px 83px;
+  mask-image: radial-gradient(ellipse at 78% 40%, #000, transparent 60%);
+}
+.backdrop-dimension {
+  background: #161123;
+}
+.backdrop-dimension .backdrop-light {
+  background: radial-gradient(ellipse at 74% 40%, #7857bd66, transparent 60%);
+}
+.backdrop-dimension .backdrop-geometry {
+  inset: -25%;
+  background-image:
+    linear-gradient(#b496f522 1px, transparent 1px),
+    linear-gradient(90deg, #b496f522 1px, transparent 1px);
+  background-size: 75px 75px;
+  transform: perspective(650px) rotateX(55deg) rotateZ(-22deg) translateY(100px);
+}
+.backdrop-dimension.is-current .backdrop-geometry {
+  transform: perspective(650px) rotateX(48deg) rotateZ(-12deg) translateY(0);
+}
+.backdrop-dimension .backdrop-detail {
+  inset: 12% -15% 12% 40%;
+  border: 1px solid #c7a5ff26;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 70px #a289e30a,
+    0 0 0 140px #a289e307;
+  transform: rotate(-25deg) scale(0.8);
+}
+.backdrop-dimension.is-current .backdrop-detail {
+  transform: rotate(0deg) scale(1);
+}
+.backdrop-broadcast {
+  background: #291313;
+}
+.backdrop-broadcast .backdrop-light {
+  background: radial-gradient(ellipse at 75% 44%, #ce655650, transparent 62%);
+}
+.backdrop-broadcast .backdrop-geometry {
+  inset: -25%;
+  background: repeating-linear-gradient(0deg, transparent 0 7px, #eaa8940a 8px 9px);
+  transform: translateY(60px);
+}
+.backdrop-broadcast.is-current .backdrop-geometry {
+  transform: translateY(0);
+}
+.backdrop-broadcast .backdrop-detail {
+  inset: 22% -8% 27% 43%;
+  border: 1px solid #f3ac8729;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 45px #d7713b0a,
+    0 0 0 90px #d7713b07;
+  transform: perspective(600px) rotateY(-30deg) scale(1.2);
+}
+.backdrop-broadcast.is-current .backdrop-detail {
+  transform: perspective(600px) rotateY(-15deg) scale(1);
+}
+.backdrop-network {
+  background: #10221b;
+}
+.backdrop-network .backdrop-light {
+  background: radial-gradient(ellipse at 78% 50%, #36785377, transparent 62%);
+}
+.backdrop-network .backdrop-geometry {
+  background-image:
+    linear-gradient(90deg, transparent 49.8%, #75b39324 50%, transparent 50.2%),
+    linear-gradient(0deg, transparent 49.8%, #75b39324 50%, transparent 50.2%);
+  background-size: 140px 100px;
+  transform: translateY(70px);
+}
+.backdrop-network.is-current .backdrop-geometry {
+  transform: translateY(0);
+}
+.backdrop-network .backdrop-detail {
+  background-image: radial-gradient(#a2e6ae88 2px, transparent 3px);
+  background-size: 140px 100px;
+  background-position: 70px 50px;
+  mask-image: linear-gradient(90deg, transparent 20%, #000);
+  transform: translateY(70px);
+}
+.backdrop-network.is-current .backdrop-detail {
+  transform: translateY(0);
+}
+.backdrop-browser {
+  background: #10202c;
+}
+.backdrop-browser .backdrop-light {
+  background: radial-gradient(ellipse at 74% 50%, #2c82b766, transparent 63%);
+}
+.backdrop-browser .backdrop-geometry {
+  inset: 17% -7% 13% 44%;
+  border: 1px solid #8bc9ee40;
+  border-radius: 8px;
+  box-shadow:
+    -40px 30px 0 -1px #172d3a,
+    -40px 30px 0 0 #8bc9ee25,
+    -80px 60px 0 -1px #14232c,
+    -80px 60px 0 0 #8bc9ee16;
+  transform: perspective(800px) rotateY(-25deg) translateX(130px);
+}
+.backdrop-browser.is-current .backdrop-geometry {
+  transform: perspective(800px) rotateY(-12deg) translateX(0);
+}
+.backdrop-browser .backdrop-detail {
+  background: repeating-linear-gradient(90deg, transparent 0 119px, #8dcaee0c 120px 121px);
+}
+.backdrop-horizon {
+  background: #172333;
+}
+.backdrop-horizon .backdrop-light {
+  background:
+    radial-gradient(ellipse at 79% 68%, #b9d9e759, transparent 54%),
+    linear-gradient(0deg, #849f991b, transparent 65%);
+}
+.backdrop-horizon .backdrop-geometry {
+  inset: 63% -15% -50% 18%;
+  border-radius: 50%;
+  border-top: 1px solid #d0e9ed66;
+  box-shadow: 0 -20px 80px #bedae52b;
+  background: linear-gradient(#c7e1e015, #09121c);
+  transform: translateY(140px) scale(1.1);
+}
+.backdrop-horizon.is-current .backdrop-geometry {
+  transform: translateY(0) scale(1);
+}
+.backdrop-horizon .backdrop-detail {
+  inset: -20% 8% 0 53%;
+  background: linear-gradient(110deg, transparent 20%, #d1e8e414 50%, transparent 75%);
+  transform: rotate(20deg) translateX(160px);
+}
+.backdrop-horizon.is-current .backdrop-detail {
+  transform: rotate(20deg) translateX(0);
+}
+.theater[data-scene='1'] .scene-glow {
+  background: radial-gradient(ellipse, #9d7dea25, transparent 67%);
+}
+.theater[data-scene='3'] .scene-glow {
+  background: radial-gradient(ellipse, #72bc8025, transparent 67%);
+}
+.theater[data-scene='4'] .scene-glow,
+.theater[data-scene='5'] .scene-glow {
+  background: radial-gradient(ellipse, #8bb8db25, transparent 67%);
+}
+.chapter-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-top: 25px;
+  position: relative;
+  z-index: 3;
+}
+.chapter-actions .continue-button {
+  margin-top: 0;
+}
+.event-button {
+  padding: 12px 0;
+  font-size: 11px;
+  border-bottom: 1px solid #d9b18366;
+  color: #d4c7b4;
+  white-space: nowrap;
+}
+.event-button span {
+  padding-left: 10px;
+  color: var(--orange);
+}
+.event-date {
+  font:
+    10px 'Space Grotesk',
+    sans-serif;
+  letter-spacing: 1.8px;
+  color: var(--orange);
+  margin: 24px 0 0;
+}
+.event-story h2 {
+  font-size: 42px;
+  line-height: 1.12;
+  letter-spacing: -1.5px;
+  margin: 16px 0 30px;
+}
+.event-story h3 {
+  font-size: 13px;
+  font-weight: 550;
+  color: #deddd2;
+  margin: 25px 0 9px;
+}
+.event-story p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: #b5b9ad;
+}
+.inline-reference {
+  color: var(--orange);
+  font-size: 10px;
+  margin-left: 4px;
+  display: inline-block;
+}
+.event-takeaway {
+  border-left: 2px solid var(--orange);
+  padding: 7px 0 7px 19px;
+  margin: 28px 0;
+  background: linear-gradient(90deg, #ef8a4f0a, transparent);
+}
+.event-takeaway > span {
+  font-size: 8px;
+  letter-spacing: 1.3px;
+  color: var(--orange);
+}
+.event-takeaway p {
+  margin: 8px 0 0;
+  color: #d4d4c9;
+}
+.event-sources {
+  border-top: 1px solid var(--line);
+}
+.event-sources a {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #c7ab89;
+  padding: 10px 0;
+}
+.event-sources a span:first-child {
+  color: #898d7f;
+  font: 9px monospace;
+  padding-top: 4px;
+}
+.event-sources a span:last-child {
+  margin-left: auto;
+}
+@media (max-width: 800px) {
+  .chapter-actions {
+    gap: 15px;
+    margin-top: 18px;
+  }
+  .event-button {
+    font-size: 9px;
+  }
+  .event-button span {
+    padding-left: 5px;
+  }
+  .event-story h2 {
+    font-size: 32px;
+  }
+  .backdrop-scrim {
+    background:
+      linear-gradient(90deg, #101110ed, #10111066 75%),
+      linear-gradient(0deg, #101110, transparent 30%, transparent 80%, #10111099);
+  }
+}
+@media (max-height: 800px) and (min-width: 801px) {
+  .chapter-actions {
+    margin-top: 17px;
+    gap: 18px;
+  }
+  .event-button {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .backdrop-layer,
+  .backdrop-light,
+  .backdrop-geometry,
+  .backdrop-detail {
+    transition: none !important;
+  }
+}

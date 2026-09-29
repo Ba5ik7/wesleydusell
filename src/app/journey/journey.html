@@ -18,7 +18,12 @@
 </header>
 <main id="story">
   <div class="journey-rail" #rail>
-    <section class="theater" aria-label="An interactive history of the web">
+    <section
+      class="theater"
+      [attr.data-scene]="active()"
+      aria-label="An interactive history of the web"
+    >
+      <app-backdrop [active]="active()" />
       <div class="era-heading">
         <span><i></i> 21 YEARS OF MAKING THE WEB</span><span>ERA 01 <b>/</b> 2005 — 2010</span>
       </div>
@@ -39,15 +44,20 @@
                   <span>{{ tag }}</span>
                 }
               </div>
-              <button class="continue-button" (click)="goTo(active() === 5 ? 0 : active() + 1)">
-                {{
-                  active() === 0
-                    ? 'Enter the story'
-                    : active() === 5
-                      ? 'Experience it again'
-                      : 'Keep exploring'
-                }}<span>↗</span>
-              </button>
+              <div class="chapter-actions">
+                <button class="continue-button" (click)="goTo(active() === 5 ? 0 : active() + 1)">
+                  {{
+                    active() === 0
+                      ? 'Enter the story'
+                      : active() === 5
+                        ? 'Experience it again'
+                        : 'Keep exploring'
+                  }}<span>↗</span>
+                </button>
+                <button class="event-button" (click)="openDialog('event')">
+                  Read the full story <span>↗</span>
+                </button>
+              </div>
             </div>
           }
         </div>
@@ -111,7 +121,11 @@
 >
   <div class="dialog-top">
     <span class="eyebrow">{{
-      dialogMode() === 'chapters' ? 'EXPLORE THE FIRST ERA' : 'A LOVE LETTER TO THE WEB'
+      dialogMode() === 'chapters'
+        ? 'EXPLORE THE FIRST ERA'
+        : dialogMode() === 'event'
+          ? chapter().eyebrow
+          : 'A LOVE LETTER TO THE WEB'
     }}</span
     ><button class="close-button" (click)="modal.close()" aria-label="Close dialog">×</button>
   </div>
@@ -127,6 +141,44 @@
         </button>
       }
     </div>
+  } @else if (dialogMode() === 'event') {
+    <article class="event-story">
+      <p class="event-date">{{ chapter().insight.date }}</p>
+      <h2>{{ chapter().insight.title }}</h2>
+      @for (section of chapter().insight.sections; track section.heading) {
+        <section>
+          <h3>{{ section.heading }}</h3>
+          <p>
+            {{ section.text }}
+            @for (reference of section.references; track reference) {
+              <a
+                class="inline-reference"
+                [href]="chapter().insight.sources[reference - 1].url"
+                target="_blank"
+                rel="noopener noreferrer"
+                [attr.aria-label]="
+                  'Source ' + reference + ': ' + chapter().insight.sources[reference - 1].label
+                "
+                >[{{ reference }}]</a
+              >
+            }
+          </p>
+        </section>
+      }
+      <aside class="event-takeaway">
+        <span>WHAT CHANGED FOR DEVELOPERS</span>
+        <p>{{ chapter().insight.takeaway }}</p>
+      </aside>
+      <div class="event-sources">
+        <h3>From the archive</h3>
+        @for (source of chapter().insight.sources; track source.url; let index = $index) {
+          <a [href]="source.url" target="_blank" rel="noopener noreferrer"
+            ><span>0{{ index + 1 }}</span
+            >{{ source.label }} <span>↗</span></a
+          >
+        }
+      </div>
+    </article>
   } @else {
     <h2>Built on<br /><em>curiosity.</em></h2>
     <p>
