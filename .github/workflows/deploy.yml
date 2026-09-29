@@ -1,64 +1,64 @@
-# name: Deploy wesleydusell
+name: Deploy wesleydusell
 
-# on:
-#   push:
-#     branches:
-#       - main
-#   workflow_dispatch:
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-# permissions:
-#   contents: read
+permissions:
+  contents: read
 
-# concurrency:
-#   group: wesleydusell-production
-#   cancel-in-progress: false
+concurrency:
+  group: wesleydusell-production
+  cancel-in-progress: false
 
-# jobs:
-#   deploy:
-#     if: github.ref == 'refs/heads/main'
-#     runs-on: ubuntu-latest
-#     timeout-minutes: 30
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-#         with:
-#           persist-credentials: false
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-#       - name: Setup Node 22
-#         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-#         with:
-#           node-version: '22'
-#           check-latest: true
-#           package-manager-cache: false
+      - name: Setup Node 22
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          check-latest: true
+          package-manager-cache: false
 
-#       - name: Validate frontend deployment settings
-#         env:
-#           MFE_DROPLET_IP: ${{ secrets.MFE_DROPLET_IP }}
-#           MFE_SSH_PRIVATE_KEY: ${{ secrets.MFE_SSH_PRIVATE_KEY }}
-#           MFE_SSH_HOST_FINGERPRINT: ${{ secrets.MFE_SSH_HOST_FINGERPRINT }}
-#         run: |
-#           test -n "$MFE_DROPLET_IP" || { echo "Missing MFE_DROPLET_IP" >&2; exit 1; }
-#           test -n "$MFE_SSH_PRIVATE_KEY" || { echo "Missing MFE_SSH_PRIVATE_KEY" >&2; exit 1; }
-#           if [[ ! "$MFE_SSH_HOST_FINGERPRINT" =~ ^SHA256:[A-Za-z0-9+/]{43}$ ]]; then
-#             echo "MFE_SSH_HOST_FINGERPRINT must contain only the frontend host's SHA256 fingerprint" >&2
-#             exit 1
-#           fi
+      - name: Validate frontend deployment settings
+        env:
+          MFE_DROPLET_IP: ${{ secrets.MFE_DROPLET_IP }}
+          MFE_SSH_PRIVATE_KEY: ${{ secrets.MFE_SSH_PRIVATE_KEY }}
+          MFE_SSH_HOST_FINGERPRINT: ${{ secrets.MFE_SSH_HOST_FINGERPRINT }}
+        run: |
+          test -n "$MFE_DROPLET_IP" || { echo "Missing MFE_DROPLET_IP" >&2; exit 1; }
+          test -n "$MFE_SSH_PRIVATE_KEY" || { echo "Missing MFE_SSH_PRIVATE_KEY" >&2; exit 1; }
+          if [[ ! "$MFE_SSH_HOST_FINGERPRINT" =~ ^SHA256:[A-Za-z0-9+/]{43}$ ]]; then
+            echo "MFE_SSH_HOST_FINGERPRINT must contain only the frontend host's SHA256 fingerprint" >&2
+            exit 1
+          fi
 
-#       - name: Install dependencies and build
-#         run: |
-#           npm ci
-#           npm run build -- --configuration development
-#           test -f dist/wesleydusell/index.html
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build -- --configuration development
+          test -f dist/wesleydusell/index.html
 
-#       - name: Copy static assets to frontend
-#         uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345 # v1.0.0
-#         with:
-#           version: '1.8.0'
-#           host: ${{ secrets.MFE_DROPLET_IP }}
-#           username: root
-#           key: ${{ secrets.MFE_SSH_PRIVATE_KEY }}
-#           fingerprint: ${{ secrets.MFE_SSH_HOST_FINGERPRINT }}
-#           source: 'dist/wesleydusell/*'
-#           target: '/opt/mfe-remotes/wesleydusell/'
-#           strip_components: 2
-#           overwrite: true
+      - name: Copy static assets to frontend
+        uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345 # v1.0.0
+        with:
+          version: '1.8.0'
+          host: ${{ secrets.DROPLET_IP }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          fingerprint: ${{ secrets.MFE_SSH_HOST_FINGERPRINT }}
+          source: 'dist/wesleydusell/*'
+          target: '/opt/wesleydusell.com/'
+          strip_components: 2
+          overwrite: true
